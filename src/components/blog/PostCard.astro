@@ -126,7 +126,7 @@ const sourceBadge =
   {
     tags && tags.length > 0 && (
       <div class="relative z-10 flex flex-wrap gap-[var(--spacing-2)]">
-        {tags.map((tag) => (
+        {tags.slice(0, 3).map((tag) => (
           <a
             href={`/blog?tag=${encodeURIComponent(tag)}`}
             class="inline-flex rounded-[var(--radius-full)] bg-[var(--color-neutral-100)] px-[var(--spacing-3)] py-[var(--spacing-1)] text-xs font-medium text-[var(--color-neutral-600)] transition-colors duration-150 hover:bg-[var(--color-neutral-200)] hover:text-[var(--color-neutral-800)] dark:bg-[var(--color-neutral-850)] dark:text-[var(--color-neutral-400)] dark:hover:bg-[var(--color-neutral-800)] dark:hover:text-[var(--color-neutral-200)]"
