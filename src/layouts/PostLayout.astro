@@ -1,0 +1,97 @@
+---
+/**
+ * Blog post layout — renders a single post with metadata header and prose content.
+ * Extends BaseLayout.
+ */
+import BaseLayout from "@layouts/BaseLayout.astro";
+
+interface Props {
+  frontmatter: {
+    title: string;
+    description: string;
+    pubDate: string;
+    updatedDate?: string;
+    tags: string[];
+    readingTime: string;
+    ogImage?: string;
+  };
+}
+
+const { frontmatter } = Astro.props;
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  tags,
+  readingTime,
+  ogImage,
+} = frontmatter;
+
+const formattedPubDate = new Date(pubDate).toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+
+const formattedUpdatedDate = updatedDate
+  ? new Date(updatedDate).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    })
+  : null;
+---
+
+<BaseLayout title={title} description={description} ogImage={ogImage}>
+  <article class="mx-auto max-w-[var(--container-max)] px-[var(--spacing-6)] py-[var(--spacing-12)]">
+    <!-- Post header -->
+    <header class="mx-auto mb-[var(--spacing-10)] max-w-[var(--content-max)]">
+      <h1
+        class="text-3xl font-bold tracking-tight text-[var(--color-neutral-900)] dark:text-[var(--color-neutral-100)] sm:text-4xl"
+      >
+        {title}
+      </h1>
+
+      <!-- Meta row: date, reading time -->
+      <div
+        class="mt-[var(--spacing-4)] flex flex-wrap items-center gap-[var(--spacing-3)] text-sm text-[var(--color-neutral-500)]"
+      >
+        <time datetime={pubDate}>
+          {formattedPubDate}
+        </time>
+        <span aria-hidden="true">&middot;</span>
+        <span>{readingTime}</span>
+        {
+          formattedUpdatedDate && (
+            <>
+              <span aria-hidden="true">&middot;</span>
+              <span>
+                Updated{" "}
+                <time datetime={updatedDate}>{formattedUpdatedDate}</time>
+              </span>
+            </>
+          )
+        }
+      </div>
+
+      <!-- Tags -->
+      {
+        tags && tags.length > 0 && (
+          <div class="mt-[var(--spacing-4)] flex flex-wrap gap-[var(--spacing-2)]">
+            {tags.map((tag) => (
+              <span class="inline-flex rounded-[var(--radius-full)] bg-[var(--color-neutral-100)] px-[var(--spacing-3)] py-[var(--spacing-1)] text-xs font-medium text-[var(--color-neutral-600)] dark:bg-[var(--color-neutral-850)] dark:text-[var(--color-neutral-400)]">
+                {tag}
+              </span>
+            ))}
+          </div>
+        )
+      }
+    </header>
+
+    <!-- Post content -->
+    <div class="prose mx-auto">
+      <slot />
+    </div>
+  </article>
+</BaseLayout>

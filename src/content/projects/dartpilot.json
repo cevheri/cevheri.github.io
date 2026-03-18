@@ -1,0 +1,11 @@
+{
+  "name": "DartPilot",
+  "slug": "dartpilot",
+  "tagline": "Flutter Template: Feature-First Clean-Arch with BLoC Pattern",
+  "description": "Flutter Template: Feature-First Clean-Arch - BLoC Pattern, Environments, Configuration, Themes, Desktop, Mobile and Web.",
+  "repo": "dartpilot/flutter-enterprise-starter",
+  "techStack": ["Flutter", "Dart", "BLoC", "Clean Architecture"],
+  "category": "template",
+  "featured": false,
+  "sortOrder": 6
+}

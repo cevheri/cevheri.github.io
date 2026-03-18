@@ -1,0 +1,175 @@
+---
+/**
+ * Full-screen mobile navigation overlay.
+ * Triggered by the hamburger button (#mobile-nav-open) in Header.
+ * Vanilla JS — no framework dependencies.
+ */
+
+const navLinks = [
+  { href: "/", label: "Home" },
+  { href: "/about", label: "About" },
+  { href: "/projects", label: "Projects" },
+  { href: "/blog", label: "Blog" },
+  { href: "/contributions", label: "Contributions" },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<div
+  id="mobile-nav"
+  class="fixed inset-0 z-[60] flex flex-col bg-[var(--color-neutral-50)] transition-opacity duration-200 dark:bg-[var(--color-neutral-950)] md:hidden"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Navigation menu"
+  data-state="closed"
+>
+  <!-- Top bar mirrors Header height -->
+  <div
+    class="flex h-16 items-center justify-between px-[var(--spacing-6)]"
+  >
+    <a
+      href="/"
+      class="text-base font-semibold tracking-tight text-[var(--color-neutral-900)] dark:text-[var(--color-neutral-100)]"
+    >
+      Cevheri Bozoglan
+    </a>
+
+    <button
+      type="button"
+      id="mobile-nav-close"
+      class="inline-flex h-9 w-9 items-center justify-center rounded-[var(--radius-md)] text-[var(--color-neutral-600)] transition-colors hover:bg-[var(--color-neutral-200)] hover:text-[var(--color-neutral-900)] dark:text-[var(--color-neutral-400)] dark:hover:bg-[var(--color-neutral-800)] dark:hover:text-[var(--color-neutral-100)]"
+      aria-label="Close navigation menu"
+    >
+      <svg
+        class="h-5 w-5"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.75"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Nav links -->
+  <nav class="flex flex-1 flex-col gap-[var(--spacing-1)] px-[var(--spacing-6)] pt-[var(--spacing-4)]" aria-label="Mobile navigation">
+    {
+      navLinks.map(({ href, label }) => {
+        const isActive =
+          href === "/"
+            ? currentPath === "/"
+            : currentPath.startsWith(href);
+        return (
+          <a
+            href={href}
+            class:list={[
+              "mobile-nav-link rounded-[var(--radius-md)] px-[var(--spacing-4)] py-[var(--spacing-3)] text-lg font-medium transition-colors duration-150",
+              isActive
+                ? "bg-[var(--color-neutral-200)] text-[var(--color-neutral-900)] dark:bg-[var(--color-neutral-800)] dark:text-[var(--color-neutral-100)]"
+                : "text-[var(--color-neutral-600)] hover:bg-[var(--color-neutral-100)] hover:text-[var(--color-neutral-900)] dark:text-[var(--color-neutral-400)] dark:hover:bg-[var(--color-neutral-850)] dark:hover:text-[var(--color-neutral-100)]",
+            ]}
+            aria-current={isActive ? "page" : undefined}
+          >
+            {label}
+          </a>
+        );
+      })
+    }
+  </nav>
+</div>
+
+<style>
+  #mobile-nav[data-state="closed"] {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  #mobile-nav[data-state="open"] {
+    opacity: 1;
+    pointer-events: auto;
+    visibility: visible;
+  }
+</style>
+
+<script is:inline>
+  (function () {
+    function init() {
+      var overlay = document.getElementById("mobile-nav");
+      var openBtn = document.getElementById("mobile-nav-open");
+      var closeBtn = document.getElementById("mobile-nav-close");
+
+      if (!overlay || !openBtn || !closeBtn) return;
+
+      var focusableSelector =
+        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+      function open() {
+        overlay.setAttribute("data-state", "open");
+        openBtn.setAttribute("aria-expanded", "true");
+        document.body.style.overflow = "hidden";
+        // Focus the close button
+        closeBtn.focus();
+      }
+
+      function close() {
+        overlay.setAttribute("data-state", "closed");
+        openBtn.setAttribute("aria-expanded", "false");
+        document.body.style.overflow = "";
+        openBtn.focus();
+      }
+
+      function handleKeyDown(e) {
+        if (overlay.getAttribute("data-state") !== "open") return;
+
+        if (e.key === "Escape") {
+          e.preventDefault();
+          close();
+          return;
+        }
+
+        // Focus trap
+        if (e.key === "Tab") {
+          var focusable = Array.from(
+            overlay.querySelectorAll(focusableSelector)
+          );
+          if (focusable.length === 0) return;
+
+          var first = focusable[0];
+          var last = focusable[focusable.length - 1];
+
+          if (e.shiftKey) {
+            if (document.activeElement === first) {
+              e.preventDefault();
+              last.focus();
+            }
+          } else {
+            if (document.activeElement === last) {
+              e.preventDefault();
+              first.focus();
+            }
+          }
+        }
+      }
+
+      openBtn.addEventListener("click", open);
+      closeBtn.addEventListener("click", close);
+      document.addEventListener("keydown", handleKeyDown);
+
+      // Close when a nav link is clicked
+      var links = overlay.querySelectorAll(".mobile-nav-link");
+      for (var i = 0; i < links.length; i++) {
+        links[i].addEventListener("click", close);
+      }
+    }
+
+    init();
+    document.addEventListener("astro:after-swap", init);
+  })();
+</script>

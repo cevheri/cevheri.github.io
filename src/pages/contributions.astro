@@ -1,0 +1,101 @@
+---
+/**
+ * Open-source contributions page — grouped by project with type and status badges.
+ */
+import PageLayout from "@layouts/PageLayout.astro";
+import { CONTRIBUTIONS } from "@data/contributions";
+import type { Contribution } from "@data/contributions";
+
+// Group contributions by project
+const grouped = CONTRIBUTIONS.reduce<Record<string, Contribution[]>>((acc, c) => {
+  if (!acc[c.project]) acc[c.project] = [];
+  acc[c.project].push(c);
+  return acc;
+}, {});
+
+// Sort project groups by number of contributions (descending)
+const sortedProjects = Object.entries(grouped).sort(
+  ([, a], [, b]) => b.length - a.length,
+);
+
+function typeBadgeClasses(type: Contribution["type"]): string {
+  return type === "pr"
+    ? "bg-emerald-500/10 text-emerald-600 dark:bg-emerald-400/10 dark:text-emerald-400"
+    : "bg-blue-500/10 text-blue-600 dark:bg-blue-400/10 dark:text-blue-400";
+}
+
+function statusBadgeClasses(status: Contribution["status"]): string {
+  switch (status) {
+    case "merged":
+      return "bg-purple-500/10 text-purple-600 dark:bg-purple-400/10 dark:text-purple-400";
+    case "open":
+      return "bg-emerald-500/10 text-emerald-600 dark:bg-emerald-400/10 dark:text-emerald-400";
+    case "closed":
+      return "bg-[var(--color-neutral-200)] text-[var(--color-neutral-600)] dark:bg-[var(--color-neutral-800)] dark:text-[var(--color-neutral-400)]";
+  }
+}
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "Open-Source Contributions — Cevheri Bozoglan",
+  description: "Pull requests and issues across the open-source ecosystem.",
+  url: "https://cevheri.github.io/contributions",
+};
+---
+
+<PageLayout title="Open-Source Contributions" description="Pull requests and issues across the open-source ecosystem." jsonLd={jsonLd}>
+  <p class="mb-[var(--spacing-10)] text-lg text-[var(--color-neutral-600)] dark:text-[var(--color-neutral-400)]">
+    Pull requests and issues I've contributed across the open-source ecosystem.
+  </p>
+
+  <div class="space-y-[var(--spacing-10)]">
+    {sortedProjects.map(([project, contributions]) => (
+      <section>
+        {/* Project header */}
+        <h2 class="mb-[var(--spacing-4)] flex items-center gap-[var(--spacing-3)] text-lg font-semibold text-[var(--color-neutral-900)] dark:text-[var(--color-neutral-100)]">
+          <svg class="h-5 w-5 shrink-0 text-[var(--color-neutral-400)] dark:text-[var(--color-neutral-600)]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
+          </svg>
+          <a
+            href={`https://github.com/${project}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="transition-colors hover:text-[var(--color-accent-500)] dark:hover:text-[var(--color-accent-400)]"
+          >
+            {project}
+          </a>
+        </h2>
+
+        {/* Contribution list */}
+        <div class="space-y-[var(--spacing-3)]">
+          {contributions.map((c) => (
+            <a
+              href={c.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group flex flex-col gap-[var(--spacing-3)] rounded-[var(--radius-lg)] border border-[var(--color-neutral-200)] p-[var(--spacing-4)] transition-all duration-200 hover:border-[var(--color-neutral-300)] hover:shadow-[var(--shadow-sm)] dark:border-[var(--color-neutral-800)] dark:hover:border-[var(--color-neutral-700)] sm:flex-row sm:items-center sm:justify-between"
+            >
+              <div class="flex-1 min-w-0">
+                <p class="text-[var(--color-neutral-800)] group-hover:text-[var(--color-accent-500)] dark:text-[var(--color-neutral-200)] dark:group-hover:text-[var(--color-accent-400)] transition-colors">
+                  {c.description}
+                </p>
+              </div>
+              <div class="flex shrink-0 items-center gap-[var(--spacing-2)]">
+                <span class={`rounded-[var(--radius-full)] px-[var(--spacing-3)] py-0.5 text-xs font-semibold ${typeBadgeClasses(c.type)}`}>
+                  {c.type === "pr" ? "PR" : "Issue"}
+                </span>
+                <span class={`rounded-[var(--radius-full)] px-[var(--spacing-3)] py-0.5 text-xs font-semibold capitalize ${statusBadgeClasses(c.status)}`}>
+                  {c.status}
+                </span>
+                <svg class="h-4 w-4 text-[var(--color-neutral-400)] transition-transform group-hover:translate-x-0.5 dark:text-[var(--color-neutral-600)]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M7 17L17 7" /><path d="M7 7h10v10" />
+                </svg>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+    ))}
+  </div>
+</PageLayout>

@@ -1,0 +1,62 @@
+---
+/**
+ * Reusable button / link component.
+ * Renders <a> when href is provided, <button> otherwise.
+ */
+import { cn } from "@lib/utils";
+
+interface Props {
+  href?: string;
+  variant?: "primary" | "secondary" | "ghost";
+  size?: "sm" | "md" | "lg";
+  external?: boolean;
+  class?: string;
+  [key: string]: unknown;
+}
+
+const {
+  href,
+  variant = "primary",
+  size = "md",
+  external = false,
+  class: className,
+  ...rest
+} = Astro.props;
+
+const base =
+  "inline-flex items-center justify-center gap-[var(--spacing-2)] font-medium rounded-[var(--radius-md)] transition-all duration-200 cursor-pointer select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent-500)]";
+
+const variants: Record<string, string> = {
+  primary:
+    "bg-[var(--color-accent-500)] text-white hover:bg-[var(--color-accent-600)] active:bg-[var(--color-accent-600)] dark:bg-[var(--color-accent-500)] dark:hover:bg-[var(--color-accent-400)]",
+  secondary:
+    "border border-[var(--color-neutral-300)] bg-transparent text-[var(--color-neutral-700)] hover:bg-[var(--color-neutral-100)] active:bg-[var(--color-neutral-200)] dark:border-[var(--color-neutral-700)] dark:text-[var(--color-neutral-300)] dark:hover:bg-[var(--color-neutral-800)] dark:active:bg-[var(--color-neutral-700)]",
+  ghost:
+    "bg-transparent text-[var(--color-neutral-700)] hover:bg-[var(--color-neutral-100)] active:bg-[var(--color-neutral-200)] dark:text-[var(--color-neutral-300)] dark:hover:bg-[var(--color-neutral-800)] dark:active:bg-[var(--color-neutral-700)]",
+};
+
+const sizes: Record<string, string> = {
+  sm: "px-[var(--spacing-3)] py-[var(--spacing-1)] text-sm",
+  md: "px-[var(--spacing-5)] py-[var(--spacing-2)] text-sm",
+  lg: "px-[var(--spacing-6)] py-[var(--spacing-3)] text-base",
+};
+
+const classes = cn(base, variants[variant], sizes[size], className);
+
+const Tag = href ? "a" : "button";
+const externalAttrs = external
+  ? { target: "_blank", rel: "noopener noreferrer" }
+  : {};
+---
+
+{
+  Tag === "a" ? (
+    <a href={href} class={classes} {...externalAttrs} {...rest}>
+      <slot />
+    </a>
+  ) : (
+    <button class={classes} {...rest}>
+      <slot />
+    </button>
+  )
+}

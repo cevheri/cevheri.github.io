@@ -1,0 +1,140 @@
+---
+/**
+ * Blog post card for the listing page.
+ * Displays title, description, date, tags, source badge, and reading time.
+ */
+import type { CollectionEntry } from "astro:content";
+import { formatDate } from "@lib/utils";
+import { calculateReadingTime } from "@lib/reading-time";
+
+interface Props {
+  post: CollectionEntry<"blog">;
+}
+
+const { post } = Astro.props;
+const { title, description, pubDate, tags, source, externalUrl, conference } =
+  post.data;
+
+const href = externalUrl ?? `/blog/${post.id}`;
+const isExternal = !!externalUrl;
+const readingTime = calculateReadingTime(post.body ?? "");
+const formattedDate = formatDate(pubDate);
+
+const sourceBadge =
+  source === "academic"
+    ? "Academic Paper"
+    : source === "medium"
+      ? "Published on Medium"
+      : null;
+---
+
+<article
+  class="group relative rounded-[var(--radius-lg)] border border-[var(--color-neutral-200)] bg-[var(--color-neutral-50)] p-[var(--spacing-6)] transition-all duration-200 hover:border-[var(--color-neutral-300)] hover:shadow-[var(--shadow-md)] dark:border-[var(--color-neutral-800)] dark:bg-[var(--color-neutral-950)] dark:hover:border-[var(--color-neutral-700)]"
+>
+  <!-- Header: source badge + date row -->
+  <div
+    class="mb-[var(--spacing-3)] flex flex-wrap items-center gap-[var(--spacing-3)] text-sm text-[var(--color-neutral-500)]"
+  >
+    {
+      sourceBadge && (
+        <span class="inline-flex items-center rounded-[var(--radius-full)] bg-[var(--color-accent-500)]/10 px-[var(--spacing-3)] py-[var(--spacing-1)] text-xs font-medium text-[var(--color-accent-500)]">
+          {source === "academic" && (
+            <svg
+              class="mr-1 h-3 w-3"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+            </svg>
+          )}
+          {source === "medium" && (
+            <svg
+              class="mr-1 h-3 w-3"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+            >
+              <path d="M13.54 12a6.8 6.8 0 0 1-6.77 6.82A6.8 6.8 0 0 1 0 12a6.8 6.8 0 0 1 6.77-6.82A6.8 6.8 0 0 1 13.54 12zm7.42 0c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42zm3.04 0c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75c.66 0 1.19 2.58 1.19 5.75z" />
+            </svg>
+          )}
+          {sourceBadge}
+        </span>
+      )
+    }
+    <time datetime={pubDate.toISOString()}>
+      {formattedDate}
+    </time>
+    <span aria-hidden="true">&middot;</span>
+    <span>{readingTime}</span>
+  </div>
+
+  <!-- Title -->
+  <h2 class="mb-[var(--spacing-2)] text-lg font-semibold tracking-tight">
+    <a
+      href={href}
+      target={isExternal ? "_blank" : undefined}
+      rel={isExternal ? "noopener noreferrer" : undefined}
+      class="text-[var(--color-neutral-900)] transition-colors duration-150 hover:text-[var(--color-accent-500)] dark:text-[var(--color-neutral-100)] dark:hover:text-[var(--color-accent-400)]"
+    >
+      <span class="absolute inset-0" aria-hidden="true"></span>
+      {title}
+      {
+        isExternal && (
+          <svg
+            class="ml-1 inline-block h-4 w-4 text-[var(--color-neutral-400)]"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-label="External link"
+          >
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+            <polyline points="15 3 21 3 21 9" />
+            <line x1="10" y1="14" x2="21" y2="3" />
+          </svg>
+        )
+      }
+    </a>
+  </h2>
+
+  <!-- Description -->
+  <p
+    class="mb-[var(--spacing-4)] line-clamp-2 text-sm leading-relaxed text-[var(--color-neutral-600)] dark:text-[var(--color-neutral-400)]"
+  >
+    {description}
+  </p>
+
+  <!-- Conference info for academic posts -->
+  {
+    conference && (
+      <p class="mb-[var(--spacing-3)] text-xs font-medium text-[var(--color-neutral-500)]">
+        <span aria-hidden="true">📍</span> {conference}
+      </p>
+    )
+  }
+
+  <!-- Tags -->
+  {
+    tags && tags.length > 0 && (
+      <div class="relative z-10 flex flex-wrap gap-[var(--spacing-2)]">
+        {tags.map((tag) => (
+          <a
+            href={`/blog?tag=${encodeURIComponent(tag)}`}
+            class="inline-flex rounded-[var(--radius-full)] bg-[var(--color-neutral-100)] px-[var(--spacing-3)] py-[var(--spacing-1)] text-xs font-medium text-[var(--color-neutral-600)] transition-colors duration-150 hover:bg-[var(--color-neutral-200)] hover:text-[var(--color-neutral-800)] dark:bg-[var(--color-neutral-850)] dark:text-[var(--color-neutral-400)] dark:hover:bg-[var(--color-neutral-800)] dark:hover:text-[var(--color-neutral-200)]"
+          >
+            {tag}
+          </a>
+        ))}
+      </div>
+    )
+  }
+</article>

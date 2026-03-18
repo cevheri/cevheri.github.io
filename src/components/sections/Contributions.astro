@@ -1,0 +1,86 @@
+---
+/**
+ * Open-source contributions summary section.
+ * Shows the first 5 contributions from the data file.
+ */
+import { CONTRIBUTIONS } from "@data/contributions";
+import Card from "@components/ui/Card.astro";
+import Button from "@components/ui/Button.astro";
+
+const items = CONTRIBUTIONS.slice(0, 5);
+
+const statusColors: Record<string, string> = {
+  merged:
+    "bg-[oklch(0.55_0.15_145/0.12)] text-[oklch(0.4_0.15_145)] dark:bg-[oklch(0.55_0.15_145/0.15)] dark:text-[oklch(0.7_0.12_145)]",
+  open: "bg-[oklch(0.55_0.15_145/0.12)] text-[oklch(0.45_0.12_145)] dark:bg-[oklch(0.55_0.15_145/0.1)] dark:text-[oklch(0.7_0.1_145)]",
+  closed:
+    "bg-[oklch(0.55_0.12_25/0.1)] text-[oklch(0.45_0.12_25)] dark:bg-[oklch(0.55_0.12_25/0.15)] dark:text-[oklch(0.7_0.1_25)]",
+};
+---
+
+<section
+  class="mx-auto max-w-[var(--container-max)] px-[var(--spacing-6)] py-[var(--spacing-16)]"
+>
+  <!-- Section header -->
+  <div class="mb-[var(--spacing-10)] flex items-end justify-between">
+    <div>
+      <h2
+        class="text-2xl font-bold tracking-tight text-[var(--color-neutral-900)] dark:text-[var(--color-neutral-100)] sm:text-3xl"
+      >
+        Open-Source Contributions
+      </h2>
+      <p
+        class="mt-[var(--spacing-2)] text-[var(--color-neutral-600)] dark:text-[var(--color-neutral-400)]"
+      >
+        Pull requests and issues across the open-source ecosystem
+      </p>
+    </div>
+    <a
+      href="/contributions"
+      class="hidden text-sm font-medium text-[var(--color-accent-500)] hover:text-[var(--color-accent-600)] dark:hover:text-[var(--color-accent-400)] sm:inline-flex sm:items-center sm:gap-1"
+    >
+      View All Contributions
+      <span aria-hidden="true">&rarr;</span>
+    </a>
+  </div>
+
+  <!-- Contributions list -->
+  <div class="grid gap-[var(--spacing-4)]">
+    {
+      items.map((item) => (
+        <Card href={item.url} class="group">
+          <div class="flex flex-col gap-[var(--spacing-2)] sm:flex-row sm:items-center sm:justify-between">
+            <div class="flex-1">
+              <div class="mb-[var(--spacing-1)] flex flex-wrap items-center gap-[var(--spacing-2)]">
+                <span class="font-mono text-sm font-medium text-[var(--color-neutral-900)] dark:text-[var(--color-neutral-100)]">
+                  {item.project}
+                </span>
+                <span
+                  class={`inline-flex items-center rounded-[var(--radius-full)] px-[var(--spacing-2)] py-0.5 text-xs font-medium uppercase tracking-wide ${item.type === "pr" ? "bg-[oklch(0.6_0.18_270/0.1)] text-[var(--color-accent-600)] dark:bg-[oklch(0.7_0.15_270/0.15)] dark:text-[var(--color-accent-400)]" : "bg-[var(--color-neutral-100)] text-[var(--color-neutral-600)] dark:bg-[var(--color-neutral-800)] dark:text-[var(--color-neutral-400)]"}`}
+                >
+                  {item.type === "pr" ? "PR" : "Issue"}
+                </span>
+              </div>
+              <p class="text-sm text-[var(--color-neutral-600)] dark:text-[var(--color-neutral-400)]">
+                {item.description}
+              </p>
+            </div>
+
+            <span
+              class={`inline-flex shrink-0 items-center rounded-[var(--radius-full)] px-[var(--spacing-2)] py-0.5 text-xs font-medium capitalize ${statusColors[item.status]}`}
+            >
+              {item.status}
+            </span>
+          </div>
+        </Card>
+      ))
+    }
+  </div>
+
+  <!-- Mobile "View All" link -->
+  <div class="mt-[var(--spacing-8)] text-center sm:hidden">
+    <Button href="/contributions" variant="secondary" size="md">
+      View All Contributions
+    </Button>
+  </div>
+</section>

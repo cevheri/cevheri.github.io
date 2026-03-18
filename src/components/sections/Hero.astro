@@ -1,0 +1,53 @@
+---
+/**
+ * Homepage hero section.
+ * Greeting, tagline, description, and two CTA buttons.
+ */
+import Button from "@components/ui/Button.astro";
+---
+
+<section
+  class="mx-auto max-w-[var(--container-max)] px-[var(--spacing-6)] pt-[var(--spacing-20)] pb-[var(--spacing-16)] sm:pt-[var(--spacing-24)] sm:pb-[var(--spacing-20)]"
+>
+  <div class="max-w-[var(--content-max)]">
+    <!-- Greeting -->
+    <p
+      class="mb-[var(--spacing-3)] text-sm font-medium tracking-wide text-[var(--color-accent-500)] uppercase"
+    >
+      Hi, I'm Cevheri
+    </p>
+
+    <!-- Tagline -->
+    <h1
+      class="mb-[var(--spacing-6)] text-4xl font-bold leading-tight tracking-tight text-[var(--color-neutral-900)] dark:text-[var(--color-neutral-100)] sm:text-5xl"
+    >
+      Senior Full-Stack Engineer building scalable applications with modern
+      technologies.
+    </h1>
+
+    <!-- Description -->
+    <p
+      class="mb-[var(--spacing-8)] max-w-[560px] text-lg leading-relaxed text-[var(--color-neutral-600)] dark:text-[var(--color-neutral-400)]"
+    >
+      With over 10 years of experience, I craft robust systems using Java,
+      Spring Boot, Flutter, Python, and cloud-native technologies. Passionate
+      about clean architecture, open source, and delivering real value through
+      software.
+    </p>
+
+    <!-- CTA Buttons -->
+    <div class="flex flex-wrap gap-[var(--spacing-4)]">
+      <Button href="/projects" variant="primary" size="lg">
+        View Projects
+      </Button>
+      <Button
+        href="https://www.linkedin.com/in/cevheribozoglan/"
+        variant="secondary"
+        size="lg"
+        external
+      >
+        Get in Touch
+      </Button>
+    </div>
+  </div>
+</section>

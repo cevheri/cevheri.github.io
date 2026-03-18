@@ -1,0 +1,12 @@
+{
+  "name": "Habizen",
+  "slug": "habizen",
+  "tagline": "Static user web page project",
+  "description": "Project from Orchids.app — static user web page built with TypeScript.",
+  "url": "https://habizen.app/",
+  "repo": "habizen/habizen.github.io",
+  "techStack": ["TypeScript", "Web"],
+  "category": "app",
+  "featured": false,
+  "sortOrder": 8
+}

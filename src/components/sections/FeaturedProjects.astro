@@ -1,0 +1,125 @@
+---
+/**
+ * Featured projects section.
+ * Shows up to 3 featured projects enriched with live GitHub stats.
+ */
+import { getCollection } from "astro:content";
+import { enrichProjects } from "@lib/github";
+import type { ProjectData } from "@lib/github";
+import Card from "@components/ui/Card.astro";
+import Badge from "@components/ui/Badge.astro";
+import Button from "@components/ui/Button.astro";
+
+const allProjects = await getCollection("projects");
+
+// Filter featured, sort by sortOrder, take up to 3
+const featured = allProjects
+  .filter((p) => p.data.featured)
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder)
+  .slice(0, 4);
+
+// Map to ProjectData shape for enrichProjects
+const projectData: ProjectData[] = featured.map((p) => ({
+  ...p.data,
+}));
+
+// Enrich with GitHub stats (gracefully degrades on failure)
+const enriched = await enrichProjects(projectData);
+---
+
+<section
+  class="mx-auto max-w-[var(--container-max)] px-[var(--spacing-6)] py-[var(--spacing-16)]"
+>
+  <!-- Section header -->
+  <div class="mb-[var(--spacing-10)] flex items-end justify-between">
+    <div>
+      <h2
+        class="text-2xl font-bold tracking-tight text-[var(--color-neutral-900)] dark:text-[var(--color-neutral-100)] sm:text-3xl"
+      >
+        Featured Projects
+      </h2>
+      <p
+        class="mt-[var(--spacing-2)] text-[var(--color-neutral-600)] dark:text-[var(--color-neutral-400)]"
+      >
+        Open-source projects and applications I've built
+      </p>
+    </div>
+    <a
+      href="/projects"
+      class="hidden text-sm font-medium text-[var(--color-accent-500)] hover:text-[var(--color-accent-600)] dark:hover:text-[var(--color-accent-400)] sm:inline-flex sm:items-center sm:gap-1"
+    >
+      View All Projects
+      <span aria-hidden="true">&rarr;</span>
+    </a>
+  </div>
+
+  <!-- Projects grid -->
+  <div class="grid gap-[var(--spacing-6)] sm:grid-cols-2">
+    {
+      enriched.map((project) => (
+        <Card
+          href={`https://github.com/${project.repo}`}
+          class="flex flex-col"
+        >
+          {/* Project name */}
+          <h3 class="mb-[var(--spacing-2)] text-lg font-semibold text-[var(--color-neutral-900)] dark:text-[var(--color-neutral-100)]">
+            {project.name}
+          </h3>
+
+          {/* Tagline */}
+          <p class="mb-[var(--spacing-4)] flex-1 text-sm leading-relaxed text-[var(--color-neutral-600)] dark:text-[var(--color-neutral-400)]">
+            {project.tagline}
+          </p>
+
+          {/* Tech stack badges */}
+          <div class="mb-[var(--spacing-3)] flex flex-wrap gap-[var(--spacing-1)]">
+            {project.techStack.map((tech) => (
+              <Badge text={tech} />
+            ))}
+          </div>
+
+          {/* GitHub stats */}
+          {(project.stars !== undefined || project.forks !== undefined) && (
+            <div class="flex items-center gap-[var(--spacing-4)] text-xs text-[var(--color-neutral-500)] dark:text-[var(--color-neutral-400)]">
+              {project.stars !== undefined && project.stars > 0 && (
+                <span class="inline-flex items-center gap-1">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 16 16"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z" />
+                  </svg>
+                  {project.stars}
+                </span>
+              )}
+              {project.forks !== undefined && project.forks > 0 && (
+                <span class="inline-flex items-center gap-1">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 16 16"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 0-1.5 0v.878H6.25v-.878a2.25 2.25 0 1 0-1.5 0ZM7.25 8.75a.75.75 0 0 1 1.5 0v2.878a2.25 2.25 0 1 1-1.5 0V8.75Z" />
+                  </svg>
+                  {project.forks}
+                </span>
+              )}
+            </div>
+          )}
+        </Card>
+      ))
+    }
+  </div>
+
+  <!-- Mobile "View All" link -->
+  <div class="mt-[var(--spacing-8)] text-center sm:hidden">
+    <Button href="/projects" variant="secondary" size="md">
+      View All Projects
+    </Button>
+  </div>
+</section>

@@ -1,0 +1,284 @@
+---
+/**
+ * Dynamic blog post page.
+ * Renders individual blog posts or redirects to external URLs.
+ */
+import type { GetStaticPaths } from "astro";
+import { getCollection, render } from "astro:content";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import { formatDate } from "@lib/utils";
+import { calculateReadingTime } from "@lib/reading-time";
+
+export const getStaticPaths = (async () => {
+  const posts = await getCollection("blog");
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}) satisfies GetStaticPaths;
+
+const { post } = Astro.props;
+const { title, description, pubDate, updatedDate, tags, source, conference, doi, coAuthors, externalUrl, ogImage, canonicalUrl } = post.data;
+
+// Redirect to external URL if present
+if (externalUrl) {
+  return Astro.redirect(externalUrl, 302);
+}
+
+const { Content } = await render(post);
+const readingTime = calculateReadingTime(post.body ?? "");
+const formattedPubDate = formatDate(pubDate);
+const formattedUpdatedDate = updatedDate ? formatDate(updatedDate) : null;
+const hasCoAuthors = coAuthors && coAuthors.length > 0;
+
+const articleJsonLd = {
+  "@context": "https://schema.org",
+  "@type": source === "academic" ? "ScholarlyArticle" : "Article",
+  headline: title,
+  description: description,
+  datePublished: pubDate.toISOString(),
+  dateModified: updatedDate ? updatedDate.toISOString() : pubDate.toISOString(),
+  author: {
+    "@type": "Person",
+    "@id": "https://cevheri.github.io/#person",
+    name: "Mehmet Cevheri Bozoglan",
+  },
+  publisher: {
+    "@type": "Person",
+    "@id": "https://cevheri.github.io/#person",
+    name: "Cevheri Bozoglan",
+  },
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": `https://cevheri.github.io/blog/${post.id}`,
+  },
+  keywords: tags,
+  inLanguage: "en-US",
+  ...(conference && { isPartOf: { "@type": "Event", name: conference } }),
+  ...(doi && { identifier: { "@type": "PropertyValue", propertyID: "DOI", value: doi } }),
+};
+
+// Find related posts (overlapping tags, excluding current post)
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+const relatedPosts = allPosts
+  .filter((p) => p.id !== post.id && !p.data.externalUrl)
+  .map((p) => ({
+    post: p,
+    overlap: p.data.tags.filter((t) => tags.includes(t)).length,
+  }))
+  .filter((p) => p.overlap > 0)
+  .sort((a, b) => b.overlap - a.overlap || b.post.data.pubDate.getTime() - a.post.data.pubDate.getTime())
+  .slice(0, 3)
+  .map((p) => p.post);
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  ogImage={ogImage}
+  canonicalUrl={canonicalUrl}
+  jsonLd={articleJsonLd}
+  ogType="article"
+  articlePublishedTime={pubDate.toISOString()}
+  articleModifiedTime={updatedDate?.toISOString()}
+  articleTags={tags}
+>
+  <article class="mx-auto max-w-[var(--container-max)] px-[var(--spacing-6)] py-[var(--spacing-12)]">
+    <!-- Post header -->
+    <header class="mx-auto mb-[var(--spacing-10)] max-w-[var(--content-max)]">
+      <!-- Back to blog -->
+      <a
+        href="/blog"
+        class="mb-[var(--spacing-6)] inline-flex items-center gap-[var(--spacing-2)] text-sm font-medium text-[var(--color-neutral-500)] transition-colors hover:text-[var(--color-neutral-900)] dark:hover:text-[var(--color-neutral-100)]"
+      >
+        <svg
+          class="h-4 w-4"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        Back to blog
+      </a>
+
+      <!-- Source badge for academic/medium -->
+      {
+        source === "academic" && (
+          <div class="mb-[var(--spacing-4)]">
+            <span class="inline-flex items-center gap-[var(--spacing-1)] rounded-[var(--radius-full)] bg-[var(--color-accent-500)]/10 px-[var(--spacing-3)] py-[var(--spacing-1)] text-xs font-medium text-[var(--color-accent-500)]">
+              <svg
+                class="h-3 w-3"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+              </svg>
+              Academic Paper
+            </span>
+          </div>
+        )
+      }
+      {
+        source === "medium" && (
+          <div class="mb-[var(--spacing-4)]">
+            <span class="inline-flex items-center gap-[var(--spacing-1)] rounded-[var(--radius-full)] bg-[var(--color-accent-500)]/10 px-[var(--spacing-3)] py-[var(--spacing-1)] text-xs font-medium text-[var(--color-accent-500)]">
+              Published on Medium
+            </span>
+          </div>
+        )
+      }
+
+      <h1
+        class="text-3xl font-bold tracking-tight text-[var(--color-neutral-900)] dark:text-[var(--color-neutral-100)] sm:text-4xl"
+      >
+        {title}
+      </h1>
+
+      <!-- Meta row: date, reading time, updated -->
+      <div
+        class="mt-[var(--spacing-4)] flex flex-wrap items-center gap-[var(--spacing-3)] text-sm text-[var(--color-neutral-500)]"
+      >
+        <time datetime={pubDate.toISOString()}>
+          {formattedPubDate}
+        </time>
+        <span aria-hidden="true">&middot;</span>
+        <span>{readingTime}</span>
+        {
+          formattedUpdatedDate && (
+            <>
+              <span aria-hidden="true">&middot;</span>
+              <span>
+                Updated{" "}
+                <time datetime={updatedDate!.toISOString()}>
+                  {formattedUpdatedDate}
+                </time>
+              </span>
+            </>
+          )
+        }
+      </div>
+
+      <!-- Conference and DOI for academic posts -->
+      {
+        (conference || doi) && (
+          <div class="mt-[var(--spacing-3)] flex flex-wrap items-center gap-[var(--spacing-3)] text-sm text-[var(--color-neutral-500)]">
+            {conference && (
+              <span class="inline-flex items-center gap-[var(--spacing-1)]">
+                <svg
+                  class="h-4 w-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                  <circle cx="12" cy="10" r="3" />
+                </svg>
+                {conference}
+              </span>
+            )}
+            {doi && (
+              <>
+                <span aria-hidden="true">&middot;</span>
+                <a
+                  href={`https://doi.org/${doi}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-[var(--spacing-1)] text-[var(--color-accent-500)] transition-colors hover:text-[var(--color-accent-600)] dark:hover:text-[var(--color-accent-400)]"
+                >
+                  DOI: {doi}
+                  <svg
+                    class="h-3 w-3"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                    <polyline points="15 3 21 3 21 9" />
+                    <line x1="10" y1="14" x2="21" y2="3" />
+                  </svg>
+                </a>
+              </>
+            )}
+          </div>
+        )
+      }
+
+      <!-- Co-authors -->
+      {
+        hasCoAuthors && (
+          <div class="mt-[var(--spacing-3)] text-sm text-[var(--color-neutral-500)]">
+            <span class="font-medium">Co-authors:</span>{" "}
+            {coAuthors!.join(", ")}
+          </div>
+        )
+      }
+
+      <!-- Tags -->
+      {
+        tags && tags.length > 0 && (
+          <div class="mt-[var(--spacing-4)] flex flex-wrap gap-[var(--spacing-2)]">
+            {tags.map((tag) => (
+              <a
+                href={`/blog?tag=${encodeURIComponent(tag)}`}
+                class="inline-flex rounded-[var(--radius-full)] bg-[var(--color-neutral-100)] px-[var(--spacing-3)] py-[var(--spacing-1)] text-xs font-medium text-[var(--color-neutral-600)] transition-colors duration-150 hover:bg-[var(--color-neutral-200)] hover:text-[var(--color-neutral-800)] dark:bg-[var(--color-neutral-850)] dark:text-[var(--color-neutral-400)] dark:hover:bg-[var(--color-neutral-800)] dark:hover:text-[var(--color-neutral-200)]"
+              >
+                {tag}
+              </a>
+            ))}
+          </div>
+        )
+      }
+    </header>
+
+    <!-- Post content -->
+    <div class="prose mx-auto">
+      <Content />
+    </div>
+
+    <!-- Related posts -->
+    {
+      relatedPosts.length > 0 && (
+        <aside class="mx-auto mt-[var(--spacing-16)] max-w-[var(--content-max)] border-t border-[var(--color-neutral-200)] pt-[var(--spacing-10)] dark:border-[var(--color-neutral-800)]">
+          <h2 class="mb-[var(--spacing-6)] text-xl font-semibold tracking-tight text-[var(--color-neutral-900)] dark:text-[var(--color-neutral-100)]">
+            Related posts
+          </h2>
+          <div class="grid gap-[var(--spacing-4)]">
+            {relatedPosts.map((related) => (
+              <a
+                href={`/blog/${related.id}`}
+                class="group/related rounded-[var(--radius-md)] border border-[var(--color-neutral-200)] p-[var(--spacing-4)] transition-all duration-150 hover:border-[var(--color-neutral-300)] hover:shadow-[var(--shadow-sm)] dark:border-[var(--color-neutral-800)] dark:hover:border-[var(--color-neutral-700)]"
+              >
+                <h3 class="font-medium text-[var(--color-neutral-900)] transition-colors group-hover/related:text-[var(--color-accent-500)] dark:text-[var(--color-neutral-100)] dark:group-hover/related:text-[var(--color-accent-400)]">
+                  {related.data.title}
+                </h3>
+                <p class="mt-[var(--spacing-1)] line-clamp-1 text-sm text-[var(--color-neutral-500)]">
+                  {related.data.description}
+                </p>
+              </a>
+            ))}
+          </div>
+        </aside>
+      )
+    }
+  </article>
+</BaseLayout>

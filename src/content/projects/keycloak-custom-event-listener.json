@@ -1,0 +1,11 @@
+{
+  "name": "Keycloak Custom Event Listener",
+  "slug": "keycloak-custom-event-listener",
+  "tagline": "Keycloak Extension — Custom Event Listener",
+  "description": "User create and register events, listen and call REST API with Java. A Keycloak SPI plugin for custom event handling.",
+  "repo": "cevheri/keycloak-custom-event-listener",
+  "techStack": ["Java", "Keycloak", "Maven"],
+  "category": "library",
+  "featured": false,
+  "sortOrder": 7
+}

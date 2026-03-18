@@ -1,0 +1,173 @@
+---
+/**
+ * About page — bio, experience, organizations, research, and tech stack.
+ */
+import PageLayout from "@layouts/PageLayout.astro";
+import { SITE } from "@data/site";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  mainEntity: {
+    "@type": "Person",
+    "@id": "https://cevheri.github.io/#person",
+    name: "Mehmet Cevheri Bozoglan",
+    jobTitle: "Senior Full-Stack Engineer",
+    description: "Senior full-stack engineer with 10+ years of experience based in Istanbul, Turkey.",
+    worksFor: { "@type": "Organization", name: "PiA Group" },
+  },
+};
+---
+
+<PageLayout title="About" description={`Learn more about ${SITE.author} — senior full-stack engineer based in Istanbul.`} jsonLd={jsonLd}>
+  <!-- Intro -->
+  <section class="mb-[var(--spacing-12)]">
+    <p class="text-lg leading-relaxed text-[var(--color-neutral-700)] dark:text-[var(--color-neutral-300)]">
+      I'm <strong class="font-semibold text-[var(--color-neutral-900)] dark:text-[var(--color-neutral-100)]">Mehmet Cevheri Bozoglan</strong>,
+      a senior full-stack engineer with over 10 years of experience, based in Istanbul, Turkey.
+      I currently work at <a href="https://www.pia-group.net/" target="_blank" rel="noopener noreferrer" class="text-[var(--color-accent-500)] underline decoration-[var(--color-accent-500)]/30 underline-offset-2 transition-colors hover:decoration-[var(--color-accent-500)]">PiA Group</a> /
+      <a href="https://intellica-tech.github.io/" target="_blank" rel="noopener noreferrer" class="text-[var(--color-accent-500)] underline decoration-[var(--color-accent-500)]/30 underline-offset-2 transition-colors hover:decoration-[var(--color-accent-500)]">Intellica</a>,
+      building scalable applications and contributing to the open-source ecosystem.
+    </p>
+  </section>
+
+  <!-- Experience -->
+  <section class="mb-[var(--spacing-12)]">
+    <h2 class="mb-[var(--spacing-6)] text-xl font-semibold tracking-tight text-[var(--color-neutral-900)] dark:text-[var(--color-neutral-100)]">
+      Experience Highlights
+    </h2>
+    <ul class="space-y-[var(--spacing-3)] text-[var(--color-neutral-700)] dark:text-[var(--color-neutral-300)]">
+      <li class="flex items-start gap-[var(--spacing-3)]">
+        <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-accent-500)]" aria-hidden="true"></span>
+        <span><strong class="font-medium text-[var(--color-neutral-900)] dark:text-[var(--color-neutral-100)]">Java / Spring Boot</strong> ecosystem — enterprise applications, REST APIs, microservices architecture</span>
+      </li>
+      <li class="flex items-start gap-[var(--spacing-3)]">
+        <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-accent-500)]" aria-hidden="true"></span>
+        <span><strong class="font-medium text-[var(--color-neutral-900)] dark:text-[var(--color-neutral-100)]">AI Engineering</strong> — GenAI applications, AI agents & agentic systems, LLM integration & fine-tuning, ML/DL pipelines, RAG architectures</span>
+      </li>
+      <li class="flex items-start gap-[var(--spacing-3)]">
+        <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-accent-500)]" aria-hidden="true"></span>
+        <span><strong class="font-medium text-[var(--color-neutral-900)] dark:text-[var(--color-neutral-100)]">Flutter</strong> mobile development — cross-platform apps with BLoC pattern and clean architecture</span>
+      </li>
+      <li class="flex items-start gap-[var(--spacing-3)]">
+        <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-accent-500)]" aria-hidden="true"></span>
+        <span><strong class="font-medium text-[var(--color-neutral-900)] dark:text-[var(--color-neutral-100)]">React / Next.js</strong> — modern web applications, server-side rendering, full-stack React development</span>
+      </li>
+      <li class="flex items-start gap-[var(--spacing-3)]">
+        <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-accent-500)]" aria-hidden="true"></span>
+        <span><strong class="font-medium text-[var(--color-neutral-900)] dark:text-[var(--color-neutral-100)]">Python / FastAPI</strong> — rapid prototyping, API development, tooling</span>
+      </li>
+      <li class="flex items-start gap-[var(--spacing-3)]">
+        <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-accent-500)]" aria-hidden="true"></span>
+        <span><strong class="font-medium text-[var(--color-neutral-900)] dark:text-[var(--color-neutral-100)]">Cloud-native architectures</strong> — Docker, Kubernetes, CI/CD pipelines, infrastructure as code</span>
+      </li>
+      <li class="flex items-start gap-[var(--spacing-3)]">
+        <span class="mt-2 block h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-accent-500)]" aria-hidden="true"></span>
+        <span><strong class="font-medium text-[var(--color-neutral-900)] dark:text-[var(--color-neutral-100)]">Microservices</strong> — service discovery, API gateways, event-driven systems, distributed tracing</span>
+      </li>
+    </ul>
+  </section>
+
+  <!-- Organizations -->
+  <section class="mb-[var(--spacing-12)]">
+    <h2 class="mb-[var(--spacing-6)] text-xl font-semibold tracking-tight text-[var(--color-neutral-900)] dark:text-[var(--color-neutral-100)]">
+      Organizations
+    </h2>
+    <div class="grid gap-[var(--spacing-4)] sm:grid-cols-2">
+      {[
+        { name: "PiA Group", url: "https://www.pia-group.net/", description: "Digital product company" },
+        { name: "Intellica", url: "https://intellica-tech.github.io/", description: "Technology solutions" },
+        { name: "dnext-technology", url: "https://github.com/dnext-technology", description: "Open-source initiatives" },
+        { name: "lokumai", url: "https://github.com/lokumai", description: "Software development" },
+      ].map((org) => (
+        <a
+          href={org.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group flex items-center gap-[var(--spacing-4)] rounded-[var(--radius-lg)] border border-[var(--color-neutral-200)] p-[var(--spacing-4)] transition-all duration-200 hover:border-[var(--color-accent-500)]/40 hover:shadow-[var(--shadow-md)] dark:border-[var(--color-neutral-800)] dark:hover:border-[var(--color-accent-400)]/40"
+        >
+          <div>
+            <span class="font-medium text-[var(--color-neutral-900)] transition-colors group-hover:text-[var(--color-accent-500)] dark:text-[var(--color-neutral-100)] dark:group-hover:text-[var(--color-accent-400)]">
+              {org.name}
+            </span>
+            <p class="mt-[var(--spacing-1)] text-sm text-[var(--color-neutral-500)] dark:text-[var(--color-neutral-400)]">
+              {org.description}
+            </p>
+          </div>
+          <svg class="ml-auto h-4 w-4 shrink-0 text-[var(--color-neutral-400)] transition-transform group-hover:translate-x-0.5 dark:text-[var(--color-neutral-600)]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M7 17L17 7" /><path d="M7 7h10v10" />
+          </svg>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Academic & Research -->
+  <section class="mb-[var(--spacing-12)]">
+    <h2 class="mb-[var(--spacing-6)] text-xl font-semibold tracking-tight text-[var(--color-neutral-900)] dark:text-[var(--color-neutral-100)]">
+      Academic & Research
+    </h2>
+    <div class="rounded-[var(--radius-lg)] border border-[var(--color-neutral-200)] p-[var(--spacing-6)] dark:border-[var(--color-neutral-800)]">
+      <p class="text-[var(--color-neutral-700)] dark:text-[var(--color-neutral-300)]">
+        My research focuses on <strong class="font-medium text-[var(--color-neutral-900)] dark:text-[var(--color-neutral-100)]">LLM code understanding</strong> —
+        exploring how large language models comprehend, generate, and reason about source code.
+        This work was published at <strong class="font-medium text-[var(--color-neutral-900)] dark:text-[var(--color-neutral-100)]">ICCSA 2025</strong> (International Conference on Computational Science and Its Applications).
+      </p>
+      <div class="mt-[var(--spacing-4)] flex flex-wrap gap-[var(--spacing-3)]">
+        <a
+          href="https://orcid.org/0009-0006-4963-1403"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-[var(--spacing-2)] rounded-[var(--radius-md)] bg-[var(--color-neutral-100)] px-[var(--spacing-3)] py-[var(--spacing-2)] text-sm font-medium text-[var(--color-neutral-700)] transition-colors hover:bg-[var(--color-neutral-200)] dark:bg-[var(--color-neutral-800)] dark:text-[var(--color-neutral-300)] dark:hover:bg-[var(--color-neutral-700)]"
+        >
+          <svg class="h-4 w-4" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid">
+            <path d="M128 0C57.3 0 0 57.3 0 128s57.3 128 128 128 128-57.3 128-128S198.7 0 128 0z" fill="#A6CE39" />
+            <path d="M86.3 186.2H70.9V79.1h15.4v107.1zM78.6 56.8c-5.7 0-10.3 4.6-10.3 10.3s4.6 10.3 10.3 10.3 10.3-4.6 10.3-10.3-4.6-10.3-10.3-10.3zM108.9 79.1h41.6c39.6 0 57 28.3 57 53.6 0 27.5-21.5 53.6-56.8 53.6h-41.8V79.1zm15.4 93.3h24.5c34.9 0 42.9-26.5 42.9-39.7C191.7 111.2 178 93 152 93h-27.7v79.4z" fill="#FFFFFF" />
+          </svg>
+          ORCID
+        </a>
+        <a
+          href="https://www.researchgate.net/profile/Mehmet-Cevheri-Bozoglan"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-[var(--spacing-2)] rounded-[var(--radius-md)] bg-[var(--color-neutral-100)] px-[var(--spacing-3)] py-[var(--spacing-2)] text-sm font-medium text-[var(--color-neutral-700)] transition-colors hover:bg-[var(--color-neutral-200)] dark:bg-[var(--color-neutral-800)] dark:text-[var(--color-neutral-300)] dark:hover:bg-[var(--color-neutral-700)]"
+        >
+          <svg class="h-4 w-4" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+            <path d="M19.586 0c-2.123 0-3.37 1.356-3.37 3.18 0 1.59.87 2.95 2.363 3.18v.01c-.322.2-.676.556-.676 1.373 0 .65.347 1.136.695 1.485-.385.26-.946.703-.946 1.644 0 1.59 1.354 2.528 3.397 2.528 2.123 0 3.562-1.042 3.562-2.674 0-1.2-.695-2.064-2.363-2.175l-.962-.064c-.347-.023-.627-.193-.627-.546 0-.29.223-.476.432-.617.148.024.306.035.47.035 2.014 0 3.118-1.188 3.118-2.738C24.679 2.384 23.38.54 21.89.1V0h-2.304zm-1.32 11.753c0 .916-.61 1.482-1.89 1.482-1.237 0-1.96-.542-1.96-1.36 0-.76.527-1.2 1.198-1.318l1.107.074c.88.058 1.545.257 1.545 1.122zm-1.103-5.45c-1.005 0-1.614-.91-1.614-2.07 0-1.18.566-2.173 1.614-2.173 1.005 0 1.614.943 1.614 2.1 0 1.17-.572 2.143-1.614 2.143zM10.66 5.89c-.72-1.1-1.89-1.71-3.38-1.71C3.65 4.18.68 7.16.68 11.53c0 3.16 1.88 5.47 4.87 5.47 1.3 0 2.51-.55 3.33-1.56v.24c0 .7-.09 1.38-.31 1.91-.47 1.13-1.5 1.82-2.96 1.82-1.16 0-2.11-.37-2.74-1.09-.37-.42-.57-.91-.63-1.43H.03c.09 1.25.63 2.3 1.6 3.1C2.72 21.02 4.17 21.5 5.88 21.5c2.13 0 3.83-.74 4.83-2.06.78-1.04 1.15-2.47 1.15-4.34V4.49h-1.2v1.4zM5.82 15.42c-2.1 0-3.38-1.67-3.38-4.07 0-2.66 1.42-5.47 3.95-5.47 2.45 0 3.38 2.24 3.38 4.5 0 3.03-1.49 5.04-3.95 5.04z" />
+          </svg>
+          ResearchGate
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tech Stack -->
+  <section>
+    <h2 class="mb-[var(--spacing-6)] text-xl font-semibold tracking-tight text-[var(--color-neutral-900)] dark:text-[var(--color-neutral-100)]">
+      Tech Stack
+    </h2>
+    <div class="space-y-[var(--spacing-6)]">
+      {[
+        { category: "Backend", items: ["Java", "Spring Boot", "Python", "FastAPI", "Node.js", "Rust"] },
+        { category: "Mobile", items: ["Flutter", "Dart", "BLoC Pattern"] },
+        { category: "Frontend", items: ["TypeScript", "Next.js", "React", "Astro", "Tailwind CSS"] },
+        { category: "Cloud & DevOps", items: ["Docker", "Kubernetes", "AWS", "GitHub Actions", "CI/CD"] },
+        { category: "Data & Messaging", items: ["PostgreSQL", "MongoDB", "Redis", "Kafka", "Elasticsearch"] },
+        { category: "Tools & Practices", items: ["Git", "Keycloak", "OpenAPI", "Microservices", "Clean Architecture"] },
+      ].map((group) => (
+        <div>
+          <h3 class="mb-[var(--spacing-3)] text-sm font-semibold uppercase tracking-wider text-[var(--color-neutral-500)] dark:text-[var(--color-neutral-400)]">
+            {group.category}
+          </h3>
+          <div class="flex flex-wrap gap-[var(--spacing-2)]">
+            {group.items.map((tech) => (
+              <span class="rounded-[var(--radius-md)] bg-[var(--color-neutral-100)] px-[var(--spacing-3)] py-[var(--spacing-1)] text-sm font-medium text-[var(--color-neutral-700)] dark:bg-[var(--color-neutral-800)] dark:text-[var(--color-neutral-300)]">
+                {tech}
+              </span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+</PageLayout>

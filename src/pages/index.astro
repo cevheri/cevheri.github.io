@@ -1,0 +1,63 @@
+---
+/**
+ * Homepage — assembles all section components.
+ * Uses BaseLayout directly (hero has its own styling).
+ */
+import BaseLayout from "@layouts/BaseLayout.astro";
+import { SITE } from "@data/site";
+
+import Hero from "@components/sections/Hero.astro";
+import FeaturedProjects from "@components/sections/FeaturedProjects.astro";
+import TechStack from "@components/sections/TechStack.astro";
+import RecentPosts from "@components/sections/RecentPosts.astro";
+import Contributions from "@components/sections/Contributions.astro";
+import ContactCTA from "@components/sections/ContactCTA.astro";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://cevheri.github.io/#website",
+      url: "https://cevheri.github.io",
+      name: "Cevheri Bozoglan",
+      description: SITE.description,
+      publisher: { "@id": "https://cevheri.github.io/#person" },
+      inLanguage: "en-US",
+    },
+    {
+      "@type": "Person",
+      "@id": "https://cevheri.github.io/#person",
+      name: "Mehmet Cevheri Bozoglan",
+      alternateName: "Cevheri Bozoglan",
+      url: "https://cevheri.github.io",
+      jobTitle: "Senior Full-Stack Engineer",
+      worksFor: { "@type": "Organization", name: "PiA Group", url: "https://www.pia-group.net/" },
+      knowsAbout: ["Java", "Spring Boot", "Flutter", "React", "Next.js", "Python", "AI Engineering", "LLM", "Microservices", "Docker", "Kubernetes"],
+      sameAs: [
+        "https://github.com/cevheri",
+        "https://www.linkedin.com/in/cevheribozoglan/",
+        "https://cevheri.medium.com/",
+        "https://www.researchgate.net/profile/Mehmet-Cevheri-Bozoglan",
+        "https://orcid.org/0009-0006-4963-1403",
+      ],
+    },
+  ],
+};
+---
+
+<BaseLayout
+  title="Cevheri Bozoglan — Senior Full-Stack Engineer"
+  description={SITE.description}
+  jsonLd={jsonLd}
+>
+  <Hero />
+
+  <div class="space-y-0">
+    <FeaturedProjects />
+    <TechStack />
+    <RecentPosts />
+    <Contributions />
+    <ContactCTA />
+  </div>
+</BaseLayout>

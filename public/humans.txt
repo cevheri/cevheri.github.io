@@ -1,0 +1,13 @@
+/* TEAM */
+Name: Mehmet Cevheri Bozoglan
+Role: Senior Full-Stack Engineer
+Site: https://cevheri.github.io
+Contact: cevheribozoglan@gmail.com
+GitHub: https://github.com/cevheri
+LinkedIn: https://www.linkedin.com/in/cevheribozoglan/
+Location: Istanbul, Turkey
+
+/* SITE */
+Built with: Astro 6, Tailwind CSS v4, TypeScript
+Hosted on: GitHub Pages
+Last updated: 2026

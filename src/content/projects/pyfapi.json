@@ -1,0 +1,11 @@
+{
+  "name": "PyFAPI",
+  "slug": "pyfapi",
+  "tagline": "Python FastAPI MongoDB CRUD Application",
+  "description": "End-to-end example of a Python FastAPI application with MongoDB CRUD operations.",
+  "repo": "cevheri/pyfapi",
+  "techStack": ["Python", "FastAPI", "MongoDB"],
+  "category": "tool",
+  "featured": false,
+  "sortOrder": 5
+}

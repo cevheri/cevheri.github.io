@@ -1,0 +1,31 @@
+---
+title: "Repository-Level Code Understanding by LLMs via Hierarchical Summarization"
+description: "Improving Code Search and Bug Localization through hierarchical summarization techniques applied to large language models."
+pubDate: 2025-04-01
+tags: ["LLM", "Code Understanding", "Research", "ICCSA 2025"]
+source: academic
+conference: "ICCSA 2025"
+doi: "10.1007/978-3-031-10536-4"
+coAuthors: []
+externalUrl: "https://www.researchgate.net/publication/391739021_Repository-Level_Code_Understanding_by_LLMs_via_Hierarchical_Summarization_Improving_Code_Search_and_Bug_Localization"
+canonicalUrl: "https://www.researchgate.net/publication/391739021_Repository-Level_Code_Understanding_by_LLMs_via_Hierarchical_Summarization_Improving_Code_Search_and_Bug_Localization"
+---
+
+## Abstract
+
+Large language models have demonstrated remarkable capabilities in understanding and generating code at the function and file level. However, reasoning about entire repositories — spanning thousands of files with intricate interdependencies — remains a significant challenge due to context window limitations and the loss of structural information when code is processed in isolation. This paper presents a hierarchical summarization approach that constructs multi-level abstractions of repository structures, enabling LLMs to navigate and comprehend large codebases more effectively.
+
+Our method operates in three stages. First, individual functions and classes are summarized to capture local semantics. These summaries are then aggregated at the module and package level, preserving architectural relationships and dependency graphs. Finally, a repository-level summary is synthesized, providing a high-level map that guides downstream tasks. By feeding these layered summaries as structured context to LLMs, we significantly reduce the noise inherent in raw code retrieval while retaining the semantic richness necessary for accurate reasoning.
+
+We evaluate the approach on two critical software engineering tasks: code search and bug localization. Experimental results demonstrate measurable improvements in retrieval accuracy for code search queries and higher precision in identifying buggy files and functions compared to baseline methods that rely on flat code representations. The findings suggest that hierarchical summarization bridges the gap between LLM capabilities and the structural complexity of real-world software repositories, offering a practical path toward more reliable AI-assisted software engineering tools.
+
+## Key Contributions
+
+- Hierarchical summarization approach for repository-level code understanding
+- Improved code search accuracy through structured context
+- Enhanced bug localization capabilities using LLM-based analysis
+
+## Links
+
+- [Full Paper on ResearchGate](https://www.researchgate.net/publication/391739021)
+- [ORCID Profile](https://orcid.org/0009-0006-4963-1403)

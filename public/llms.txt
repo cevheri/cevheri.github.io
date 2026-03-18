@@ -1,0 +1,46 @@
+# Cevheri Bozoglan
+
+> Senior Full-Stack Engineer based in Istanbul, Turkey. 10+ years of experience building scalable applications with Java, Spring Boot, Flutter, React, Next.js, Python, and AI/ML technologies. Currently at PiA Group / Intellica.
+
+## About
+
+Mehmet Cevheri Bozoglan is a senior full-stack engineer specializing in enterprise Java/Spring Boot applications, Flutter mobile development, React/Next.js web applications, AI engineering (GenAI, LLM, AI Agents, RAG), Python/FastAPI, and cloud-native architectures. He actively contributes to the open-source ecosystem and has published academic research on LLM-based code understanding.
+
+- [About Page](https://cevheri.github.io/about)
+- [LinkedIn](https://www.linkedin.com/in/cevheribozoglan/)
+- [GitHub](https://github.com/cevheri)
+- [ORCID](https://orcid.org/0009-0006-4963-1403)
+
+## Featured Projects
+
+- [Flutter BLoC Advanced](https://github.com/cevheri/flutter-bloc-advanced): A production-ready, community-friendly Flutter starter built with BLoC, repository pattern, responsive UI, role-based access control, and internationalization.
+- [Spring Boot Microservices](https://github.com/cevheri/springboot-microservices-example): API Gateway, Service Registry, Circuit Breaker, Hystrix Dashboard, and other microservices patterns.
+- [LibreDB Studio](https://github.com/libredb/libredb-studio): A modern, blazing-fast SQL IDE for the cloud era. Query PostgreSQL, MySQL, SQLite & MongoDB from your browser.
+- [Noteail](https://github.com/noteail/noteai): Your new modern, simple note app.
+- [PyFAPI](https://github.com/cevheri/pyfapi): Python FastAPI MongoDB CRUD Application end-to-end example.
+- [DartPilot](https://github.com/dartpilot/flutter-enterprise-starter): Flutter Template with Feature-First Clean-Arch and BLoC Pattern.
+- [Keycloak Custom Event Listener](https://github.com/cevheri/keycloak-custom-event-listener): Keycloak Extension for custom event handling with REST API integration.
+
+## Open-Source Contributions
+
+- [Open WebUI PR #5613](https://github.com/open-webui/open-webui/pull/5613): Contribution to Open WebUI — a self-hosted AI interface.
+- [JHipster Generator PR #20802](https://github.com/jhipster/generator-jhipster/pull/20802): Pull request contribution to the JHipster application generator.
+- [OpenAPI Generator PR #13536](https://github.com/OpenAPITools/openapi-generator/pull/13536): Contribution to code generation from OpenAPI specs.
+- [LangGraph PR #17](https://github.com/langchain-ai/new-langgraph-project/pull/17): New project contribution to the LangGraph ecosystem.
+- [Linux Mint Cinnamon Applets](https://github.com/linuxmint/cinnamon-spices-applets/pulls?q=is%3Apr+author%3Acevheri+is%3Aclosed): Contributions to Linux Mint desktop applets.
+
+## Research & Publications
+
+- [Repository-Level Code Understanding by LLMs via Hierarchical Summarization](https://www.researchgate.net/publication/391739021): Improving Code Search and Bug Localization — ICCSA 2025.
+
+## Blog
+
+- [Blog Posts](https://cevheri.github.io/blog): Articles, tutorials, and research papers.
+
+## Contact
+
+- Email: cevheribozoglan@gmail.com
+- LinkedIn: https://www.linkedin.com/in/cevheribozoglan/
+- GitHub: https://github.com/cevheri
+- Medium: https://cevheri.medium.com/
+- ResearchGate: https://www.researchgate.net/profile/Mehmet-Cevheri-Bozoglan

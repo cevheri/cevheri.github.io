@@ -1,0 +1,33 @@
+---
+/**
+ * Reusable card component with optional link wrapper.
+ * Subtle border, rounded corners, hover lift effect.
+ */
+import { cn } from "@lib/utils";
+
+interface Props {
+  href?: string;
+  class?: string;
+}
+
+const { href, class: className } = Astro.props;
+
+const base =
+  "block rounded-[var(--radius-lg)] border border-[var(--color-neutral-200)] bg-white p-[var(--spacing-6)] transition-all duration-200 dark:border-[var(--color-neutral-800)] dark:bg-[var(--color-neutral-900)]";
+
+const interactive = href
+  ? "hover:border-[var(--color-neutral-300)] hover:shadow-[var(--shadow-md)] dark:hover:border-[var(--color-neutral-700)]"
+  : "";
+---
+
+{
+  href ? (
+    <a href={href} class={cn(base, interactive, className)}>
+      <slot />
+    </a>
+  ) : (
+    <div class={cn(base, className)}>
+      <slot />
+    </div>
+  )
+}

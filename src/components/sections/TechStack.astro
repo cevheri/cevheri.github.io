@@ -1,0 +1,67 @@
+---
+/**
+ * Visual tech stack section.
+ * Displays technologies grouped by category with Badge components.
+ */
+import Badge from "@components/ui/Badge.astro";
+
+interface TechCategory {
+  name: string;
+  items: string[];
+}
+
+const categories: TechCategory[] = [
+  {
+    name: "Backend",
+    items: ["Java", "Spring Boot", "Kotlin", "Python", "FastAPI"],
+  },
+  {
+    name: "Frontend",
+    items: ["Flutter", "Dart", "React", "Next.js", "TypeScript"],
+  },
+  {
+    name: "DevOps",
+    items: ["Docker", "Kubernetes", "AWS", "GCP", "CI/CD"],
+  },
+  {
+    name: "Data",
+    items: ["PostgreSQL", "MongoDB", "Redis", "Elasticsearch"],
+  },
+];
+---
+
+<section
+  class="mx-auto max-w-[var(--container-max)] px-[var(--spacing-6)] py-[var(--spacing-16)]"
+>
+  <!-- Section header -->
+  <div class="mb-[var(--spacing-10)]">
+    <h2
+      class="text-2xl font-bold tracking-tight text-[var(--color-neutral-900)] dark:text-[var(--color-neutral-100)] sm:text-3xl"
+    >
+      Tech Stack
+    </h2>
+    <p
+      class="mt-[var(--spacing-2)] text-[var(--color-neutral-600)] dark:text-[var(--color-neutral-400)]"
+    >
+      Technologies and tools I work with
+    </p>
+  </div>
+
+  <!-- Categories grid -->
+  <div class="grid gap-[var(--spacing-8)] sm:grid-cols-2">
+    {
+      categories.map((category) => (
+        <div>
+          <h3 class="mb-[var(--spacing-3)] text-sm font-semibold uppercase tracking-wider text-[var(--color-neutral-500)] dark:text-[var(--color-neutral-400)]">
+            {category.name}
+          </h3>
+          <div class="flex flex-wrap gap-[var(--spacing-2)]">
+            {category.items.map((tech) => (
+              <Badge text={tech} variant="accent" />
+            ))}
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</section>

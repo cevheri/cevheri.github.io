@@ -1,0 +1,11 @@
+{
+  "name": "Flutter BLoC Advanced",
+  "slug": "flutter-bloc-advanced",
+  "tagline": "A production-ready, community-friendly Flutter starter",
+  "description": "Built with BLoC, repository pattern, responsive UI, role-based access control, internationalization, and multi-environment support.",
+  "repo": "cevheri/flutter-bloc-advanced",
+  "techStack": ["Flutter", "Dart", "BLoC", "Clean Architecture"],
+  "category": "app",
+  "featured": true,
+  "sortOrder": 1
+}

@@ -1,0 +1,126 @@
+---
+/**
+ * Blog listing page.
+ * Displays all published blog posts with tag-based filtering via URL query params.
+ */
+import { getCollection } from "astro:content";
+import PageLayout from "@layouts/PageLayout.astro";
+import PostCard from "@components/blog/PostCard.astro";
+
+// Fetch and filter posts
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+const sortedPosts = allPosts.sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime(),
+);
+
+// Extract all unique tags
+const allTags = [
+  ...new Set(sortedPosts.flatMap((post) => post.data.tags)),
+].sort((a, b) => a.localeCompare(b));
+
+// Server-side tag filtering via URL query param
+const activeTag = Astro.url.searchParams.get("tag");
+const filteredPosts = activeTag
+  ? sortedPosts.filter((post) => post.data.tags.includes(activeTag))
+  : sortedPosts;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "Blog — Cevheri Bozoglan",
+  description: "Articles, tutorials, and research papers by Cevheri Bozoglan.",
+  url: "https://cevheri.github.io/blog",
+};
+---
+
+<PageLayout title="Blog" description="Articles, tutorials, and research papers by Cevheri Bozoglan" jsonLd={jsonLd}>
+  <!-- Subtitle -->
+  <p
+    class="mb-[var(--spacing-8)] text-lg text-[var(--color-neutral-500)] dark:text-[var(--color-neutral-400)]"
+  >
+    Articles, tutorials, and research papers
+  </p>
+
+  <!-- Tag filters -->
+  {
+    allTags.length > 0 && (
+      <nav
+        class="mb-[var(--spacing-10)] flex flex-wrap gap-[var(--spacing-2)]"
+        aria-label="Filter posts by tag"
+      >
+        <a
+          href="/blog"
+          class:list={[
+            "inline-flex rounded-[var(--radius-full)] px-[var(--spacing-4)] py-[var(--spacing-2)] text-sm font-medium transition-colors duration-150",
+            !activeTag
+              ? "bg-[var(--color-accent-500)] text-white"
+              : "bg-[var(--color-neutral-100)] text-[var(--color-neutral-600)] hover:bg-[var(--color-neutral-200)] hover:text-[var(--color-neutral-800)] dark:bg-[var(--color-neutral-850)] dark:text-[var(--color-neutral-400)] dark:hover:bg-[var(--color-neutral-800)] dark:hover:text-[var(--color-neutral-200)]",
+          ]}
+          aria-current={!activeTag ? "true" : undefined}
+        >
+          All
+        </a>
+        {allTags.map((tag) => {
+          const isActive = activeTag === tag;
+          return (
+            <a
+              href={`/blog?tag=${encodeURIComponent(tag)}`}
+              class:list={[
+                "inline-flex rounded-[var(--radius-full)] px-[var(--spacing-4)] py-[var(--spacing-2)] text-sm font-medium transition-colors duration-150",
+                isActive
+                  ? "bg-[var(--color-accent-500)] text-white"
+                  : "bg-[var(--color-neutral-100)] text-[var(--color-neutral-600)] hover:bg-[var(--color-neutral-200)] hover:text-[var(--color-neutral-800)] dark:bg-[var(--color-neutral-850)] dark:text-[var(--color-neutral-400)] dark:hover:bg-[var(--color-neutral-800)] dark:hover:text-[var(--color-neutral-200)]",
+              ]}
+              aria-current={isActive ? "true" : undefined}
+            >
+              {tag}
+            </a>
+          );
+        })}
+      </nav>
+    )
+  }
+
+  <!-- Post count -->
+  <p
+    class="mb-[var(--spacing-6)] text-sm text-[var(--color-neutral-500)]"
+    aria-live="polite"
+  >
+    {
+      activeTag
+        ? `Showing ${filteredPosts.length} post${filteredPosts.length !== 1 ? "s" : ""} tagged "${activeTag}"`
+        : `${filteredPosts.length} post${filteredPosts.length !== 1 ? "s" : ""}`
+    }
+  </p>
+
+  <!-- Posts grid -->
+  {
+    filteredPosts.length > 0 ? (
+      <div class="grid gap-[var(--spacing-6)]">
+        {filteredPosts.map((post) => (
+          <PostCard post={post} />
+        ))}
+      </div>
+    ) : (
+      <div class="py-[var(--spacing-16)] text-center">
+        <p class="text-lg text-[var(--color-neutral-500)] dark:text-[var(--color-neutral-400)]">
+          No posts found
+          {activeTag && (
+            <span>
+              {" "}
+              for tag "{activeTag}"
+            </span>
+          )}
+        </p>
+        {activeTag && (
+          <a
+            href="/blog"
+            class="mt-[var(--spacing-4)] inline-flex text-sm font-medium text-[var(--color-accent-500)] transition-colors hover:text-[var(--color-accent-600)] dark:hover:text-[var(--color-accent-400)]"
+          >
+            View all posts
+          </a>
+        )}
+      </div>
+    )
+  }
+</PageLayout>

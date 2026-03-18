@@ -1,0 +1,12 @@
+{
+  "name": "LibreDB Studio",
+  "slug": "libredb-studio",
+  "tagline": "A modern, blazing-fast SQL IDE for the cloud era",
+  "description": "Query PostgreSQL, MySQL, SQLite & MongoDB from anywhere — your browser is your new database studio. AI-powered open-source SQL IDE.",
+  "url": "https://libredb.org/",
+  "repo": "libredb/libredb-studio",
+  "techStack": ["TypeScript", "SQL", "PostgreSQL", "MySQL", "SQLite", "MongoDB"],
+  "category": "tool",
+  "featured": true,
+  "sortOrder": 3
+}

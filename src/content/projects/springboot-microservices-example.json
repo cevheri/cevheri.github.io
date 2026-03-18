@@ -1,0 +1,11 @@
+{
+  "name": "Spring Boot Microservices",
+  "slug": "springboot-microservices-example",
+  "tagline": "Spring Boot Microservices Application with API Gateway and Service Registry",
+  "description": "API Gateway, Service Registry, Circuit Breaker, Hystrix Dashboard, and other microservices patterns.",
+  "repo": "cevheri/springboot-microservices-example",
+  "techStack": ["Java", "Spring Boot", "Docker", "Microservices"],
+  "category": "template",
+  "featured": true,
+  "sortOrder": 2
+}

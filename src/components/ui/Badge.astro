@@ -1,0 +1,27 @@
+---
+/**
+ * Tech stack tag — small pill with background and text.
+ * Supports two variants: default (neutral) and accent (brand color).
+ */
+import { cn } from "@lib/utils";
+
+interface Props {
+  text: string;
+  variant?: "default" | "accent";
+  class?: string;
+}
+
+const { text, variant = "default", class: className } = Astro.props;
+
+const base =
+  "inline-flex items-center px-[var(--spacing-2)] py-[var(--spacing-1)] text-xs font-medium leading-none rounded-[var(--radius-full)] select-none whitespace-nowrap";
+
+const variants: Record<string, string> = {
+  default:
+    "bg-[var(--color-neutral-100)] text-[var(--color-neutral-700)] dark:bg-[var(--color-neutral-800)] dark:text-[var(--color-neutral-300)]",
+  accent:
+    "bg-[oklch(0.6_0.18_270/0.1)] text-[var(--color-accent-600)] dark:bg-[oklch(0.7_0.15_270/0.15)] dark:text-[var(--color-accent-400)]",
+};
+---
+
+<span class={cn(base, variants[variant], className)}>{text}</span>

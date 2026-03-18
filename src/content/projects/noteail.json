@@ -1,0 +1,12 @@
+{
+  "name": "Noteail",
+  "slug": "noteail",
+  "tagline": "Your new modern, simple note app",
+  "description": "Your new modern, simple note app.",
+  "url": "https://noteail.com/",
+  "repo": "noteail/noteai",
+  "techStack": ["TypeScript", "Web App"],
+  "category": "app",
+  "featured": true,
+  "sortOrder": 4
+}
